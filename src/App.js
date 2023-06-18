@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
-
+//import {Header,Footer} from './Components/Layouts';
+import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+// routes
+import Router from './routes';
+// theme
+import ThemeProvider from './theme';
+// components
+import { StyledChart } from './components/chart';
+import ScrollToTop from './components/scroll-to-top';
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <HelmetProvider>
+    <BrowserRouter>
+      <ThemeProvider>
+        <ScrollToTop />
+        <StyledChart />
+        <Router />
+      </ThemeProvider>
+    </BrowserRouter>
+  </HelmetProvider>
   );
 }
 

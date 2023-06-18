@@ -1,0 +1,164 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+model Member {
+   id Int @id @default(autoincrement())
+   userId String?
+   userName String?
+   userEmail String?
+   loginAccount String? @unique
+   loginPassword String?
+   payAccount String?
+   phone String?
+   avatar String? @default("https://img1.baidu.com/it/u=307074048,654359288&fm=253&fmt=auto&app=120&f=JPEG?w=889&h=500")
+   status Int @default(0)
+   delFlag Int @default(0)
+   loginIp String?
+   loginTime String?
+   createBy String?
+   createTime DateTime @default(now())
+   updateBy String?
+   updateTime  DateTime @default(now())
+}
+
+model PaymentSdk {
+   id                 Int      @id @default(autoincrement())
+   appId              String   @unique
+   payWay             String   @default("支付宝")
+   signType           String   @default("RSA2")
+   payPublicKey       String   @default("")
+   privateKey         String   @default("")
+   gateway            String   @default("")
+   returnUrl          String   @default("")
+   notifyUrl          String   @default("")
+   createTime         DateTime @default(now())
+   updateTime         DateTime @default(now())
+}
+
+model Settlement {
+   id                 Int      @id @default(autoincrement())
+   settlementId       String   @unique
+   settlementMonth    String   @default("")
+   merchantId         String   @default("")
+   merchantName       String   @default("")
+   settlementMoney    String   @default("")
+   settlementWay      String   @default("")
+   settlementChannel  String   @default("")
+   settlementDocState String   @default("")
+   settlementState    String   @default("")
+   notes              String   @default("")
+   createTime         DateTime @default(now())
+   settlementTime     String @default("")
+}
+model Goods {
+  id    Int     @id @default(autoincrement())
+  name String  @unique
+  image  String?
+  description  String?
+  brand  String?
+  category  String?
+  price String?
+  countInStock Int @default(0)
+  numReviews Int @default(0)
+  rating Int @default(0)
+}
+
+model User {
+   id Int @id @default(autoincrement())
+   name String?
+   email String @unique
+   password String?
+   address String  @default("")
+   phone String @default("")
+   role Int @default(0)
+   status String? @default("0") // 0=正常状态，1=注销
+   profiles    Profile?
+   addrs       UserAddr[]
+   payAccounts PayAccount[]
+}
+
+model Cartlist {
+   id Int @id @default(autoincrement())
+   name String?
+   price String?
+   num Int @default(0)
+   status Int @default(0)
+   u_email String?
+  goods_id String?
+}
+
+model Orders {
+  order_id      String  @unique
+  payment_type  String?
+  status        String  @default("1") //0=取消订单，1=待付款，2=已付款，3=未发货，4=已发货，5=完成
+  total         String?
+  create_time   String?
+  shipping_name String?
+  user_id       String?
+  address       String  @default("")
+  phone         String  @default("")
+}
+
+model Profile {
+  id          Int      @id @default(autoincrement())
+  pId         Int      @unique
+  p           User?    @relation(fields: [pId], references: [id])
+  name        String?
+  email       String?
+  avatar      String?
+  birthday    DateTime @default(now())
+  phoneNumber String?
+  sex         String?
+  website     String?
+  createTime  DateTime @default(now())
+  updatTime   DateTime @default(now())
+}
+
+model UserAddr {
+  id                      Int      @id @default(autoincrement())
+  pId                     Int
+  p                       User?    @relation(fields: [pId], references: [id])
+  name                    String?
+  phoneNumber             String?
+  provincialAndUrbanAreas String?
+  address                 String?
+  fullAddr                String?
+  isDefaultAddr           Boolean  @default(false)
+  status                  Int?
+  createTime              DateTime @default(now())
+  updateTime              DateTime @default(now())
+}
+
+model PayAccount {
+  id          Int      @id @default(autoincrement())
+  pId         Int
+  p           User?    @relation(fields: [pId], references: [id])
+  bankName    String?
+  cardType    String?
+  bankNumber  String?
+  accountName String?
+  active      Boolean  @default(false)
+  status      Int?
+  createTime  DateTime @default(now())
+  updateTime  DateTime @default(now())
+}
+model AlipaySdk {
+   id                 Int      @id @default(autoincrement())
+   appId              String   @unique
+   signType           String   @default("RSA2")
+   alipayPublicKey    String   @default("")
+   privateKey         String   @default("")
+   gateway            String   @default("")
+   returnUrl          String   @default("")
+   notifyUrl          String   @default("")
+   createTime         DateTime @default(now())
+   updateTime         DateTime @default(now())
+}
